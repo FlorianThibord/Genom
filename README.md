@@ -1,8 +1,9 @@
 PROJET GENOM : K-MERES
 ======================
 
-FLORIAN THIBORD
-LOUIS BOURGUIGNON
+Florian THIBORD
+
+Louis BOURGUIGNON
 
 HOW TO USE
 ----------
