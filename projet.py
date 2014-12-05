@@ -63,6 +63,7 @@ def get_seq_name(line):
 	res_part = line.split("| ")
 	res_part = res_part[1].split(",")
 	res = res_part[0]
+	print res
 	return res
 
 def process_my_file(my_file, k, dico):
@@ -73,17 +74,18 @@ def process_my_file(my_file, k, dico):
 	seq = ""
 	for i in range(1, len(lines)):
 		seq = seq + lines[i][:-1]
-	my_genome = Genome(file_name, seq, k)
+	my_genome = Genome(file_name, seq, k, "?")
 	return my_genome
 
 def process_sequences(k, dico):	# RECUPERER SEQUENCES DANS UN DOSSIER "GENOMES"
 	family_list = os.listdir("GENOMES")
 	genomes_list = []
+	os.chdir("./GENOMES/")
 	for i in family_list:
 		os.chdir("./" + i + "/")
 		genomes_list.append(process_my_file("sequence.fasta", k, dico))
 		os.chdir("./../")
-	return liste_des_genomes
+	return genomes_list
 
 #############################################
 #############################################
@@ -99,7 +101,7 @@ def score_between_sigs(dico1, dico2):
 	return score
 
 # calcule la signature dune fenetre et calcule la distance entre cette signature et celle du genome
-def calc_distrib_along_genome(genome_to_calc, size_window, gap_window, dico, k):
+def compute_distrib_genome(genome_to_calc, size_window, gap_window, dico, k):
 	sequence_a_parser = genome_to_calc.seq + genome_to_calc.seq[0 : size_window]
 	scoring = []
 	position = []
@@ -113,11 +115,11 @@ def calc_distrib_along_genome(genome_to_calc, size_window, gap_window, dico, k):
 # MORE INFO :::::: http://math.mad.free.fr/depot/numpy/courbe.html
 # plt.clf()  ::: efface la fenetre graphique
 # plt.savefig(nomfichier)  ::: sauvegarde 		
-def plot_signature_genome(vectorposi, vectorscore):
+def plot_sig_genome(vectorposi, vectorscore, name):
 	plt.plot(vectorposi, vectorscore)
 	plt.ylabel('Distance windows vs Genome')
 	plt.xlabel('position dans Genome')
-	plt.show()
+	plt.savefig(name)
 def close_graph():
 	plt.close()
 
@@ -126,11 +128,12 @@ def close_graph():
 #MAIN
 
 #test plot
-def main():
+def main(k):
 	genomes = process_sequences(k, {})
 	for g in genomes:
-		(p,s) = calc_distrib_along_genome(g, 1000, 200, {}, 3)
-		plot_signature_genome(p, s)
+		(p,s) = compute_distrib_genome(g, 1000, 200, {}, 3)
+		plot_sig_genome(p, s, g.name)
 
 
 
+main(3)
