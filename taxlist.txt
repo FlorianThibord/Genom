@@ -1,7 +1,3 @@
-Nostoc azollae 0708	298489615	'Nostoc azollae' 0708
-Anabaena azollae	Anabaena	Nostocaceae	Nostocales
-Cyanobacteria	Bacteria	cellular organisms	
-
 Acaryochloris marina MBIC11017	158333234	Acaryochloris marina MBIC11017	Acaryochloris marina	Acaryochloris	unclassified Cyanobacteria	Cyanobacteria	Bacteria	cellular organisms	
 Acetobacter pasteurianus IFO 3283-01	258541106	Acetobacter pasteurianus IFO 3283-01-42C	Acetobacter pasteurianus	Acetobacter	Acetobacteraceae	Rhodospirillales	Alphaproteobacteria	Proteobacteria	Bacteria	cellular organisms	
 Acetobacter pasteurianus IFO 3283-01-42C	384117895	Acetobacter pasteurianus IFO 3283-01-42C	Acetobacter pasteurianus	Acetobacter	Acetobacteraceae	Rhodospirillales	Alphaproteobacteria	Proteobacteria	Bacteria	cellular organisms	
