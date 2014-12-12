@@ -17,10 +17,10 @@ import tree_build
 nucl_list = ["A","T","G","C"]
 
 class Genome:
-	def __init__ (self, name, seq, k, dico_commun):
+	def __init__ (self, name, seq, k, kmeres_l):
 		self.name = name
 		self.seq = seq
-		self.sig = compute_kmere(seq + seq[0:k], k, dico_commun)
+		self.sig = compute_kmere(seq + seq[0:k], k, kmeres_l)
 		self.famille="?"
 		self.prediction="?"
 
@@ -44,9 +44,15 @@ def build_empty_dict(l):
 		my_dict[elt] = 0.0
 	return my_dict
 
+def empty_dict(d):
+	for elt in d.keys():
+		d[elt] = 0.0
+	return d
+
 #compteur
-def compute_kmere(seq, k, my_dict):
+def compute_kmere(seq, k, kmeres_l):
 	i = 0
+	my_dict = build_empty_dict(kmeres_l)
 	list_keys = my_dict.keys()
 	while i < len(seq) - k:
 		key = seq[i : (i + k)]
@@ -71,7 +77,7 @@ def get_seq_name(line):
 	res = res_part[0]
 	return res
 
-def process_my_file(my_file, k, dico_commun):
+def process_my_file(my_file, k, kmeres_l):
 	file_in = open(my_file, 'r')
 	lines = file_in.readlines()
 	file_in.close()
@@ -79,17 +85,17 @@ def process_my_file(my_file, k, dico_commun):
 	seq = ""
 	for i in range(1, len(lines)):
 		seq = seq + lines[i][:-1]
-	my_genome = Genome(file_name, seq, k, dico_commun)
+	my_genome = Genome(file_name, seq, k, kmeres_l)
 	return my_genome
 
 
-def lecture_dossier_sequences(directory_to_read, k, dico_commun):
+def lecture_dossier_sequences(directory_to_read, k, kmeres_l):
 # RECUPERER SEQUENCES DANS UN DOSSIER "GENOMES"
 	listedesfichiers = os.listdir(directory_to_read)
 	liste_des_genomes = []
-	for i in range(0, len(listedesfichiers) - 1):
-		liste_des_genomes.append(
-			process_my_file(directory_to_read + "/" + listedesfichiers[i], k, dico_commun))
+	for i in range(0, len(listedesfichiers)):
+		res = process_my_file(directory_to_read + "/" + listedesfichiers[i], k, kmeres_l)
+		liste_des_genomes.append(res)
 		# liste_des_genomes[i].famille = directory_to_read.split("/")[1]
 	return liste_des_genomes
 
@@ -105,19 +111,16 @@ def lecture_dossier_sequences(directory_to_read, k, dico_commun):
 # 	return genomes_list
 
 def write_score(liste):
-	file_out= open("sauvegarde.txt", 'w')
-	
+	file_out= open("sauvegarde.txt", 'w')	
 	for i in liste:
 		file_out.write(str(i)+'\n')
 	file_out.close()
 
 def write_every_dico(list_genome):
 	file_out=open("sauvegarde_dico.txt", 'w')
-	
 	for j in list_genome:
 		file_out.write(j.name)
 	file_out.write("\n")
-		
 	dico_key=list_genome.sig.keys()
 	for i in dico_key:
 		for j in list_genome:
@@ -141,13 +144,13 @@ def calculator_score_between_2signature(dico1,dico2):
 	return score
 
 # calcule la signature dune fenetre et calcule la distance entre cette signature et celle du genome
-def calc_distrib_along_genome(genome_to_calc, size_window, gap_window, dico, k):
+def calc_distrib_along_genome(genome_to_calc, size_window, gap_window, kmeres_l, k):
 	sequence_a_parser = genome_to_calc.seq + genome_to_calc.seq[0:size_window]
 	scoring = []
 	position = []
 	for i in range(0, len(sequence_a_parser) - size_window, gap_window):
 		position.append(i)
-		dico_of_the_window = compute_kmere(sequence_a_parser[i:i+size_window], k, dico)
+		dico_of_the_window = compute_kmere(sequence_a_parser[i:i+size_window], k, kmeres_l)
 		scoring.append(calculator_score_between_2signature(dico_of_the_window, genome_to_calc.sig))
 	return(position, scoring)
 
@@ -276,25 +279,19 @@ def estimated_bin_dico(liste_genome):
 
 #test plot
 def main(k):
-	directory_to_read = "GENOMES"
+	directory_to_read = "GENOMES2"
 	l = build_kmere_list(nucl_list, k)
-	dico_main = build_empty_dict(l)
-	genomes = lecture_dossier_sequences(directory_to_read, k, dico_main)
-	i = 0
-	for g in genomes:
-		i += 1
-		k = i
-		if i > 4:
-			print(i)
-			break
-		(p,s) = calc_distrib_along_genome(g, 1000, 200, dico_main, k)
-#		plot_signature_genome(p, s, g.name)
+	genomes = lecture_dossier_sequences(directory_to_read, k, l)
 	tree = tree_build.main()
-	print(tree.name)
+	for g in range(len(genomes)):
+		tree.add_leave_in_tree(genomes[g])
+		# (p,s) = calc_distrib_along_genome(g, 1000, 200, dico_main, k)
+	tree.print_tree("-")
 
 
 
-main(2)
+
+main(6)
 
 
 

@@ -3,33 +3,57 @@
 
 class Node:
 	
-	def __init__ (self, name, pere, genome=None):
+	def __init__ (self, name, pere):
 		self.name = name
                 self.niveau = 0
 		self.fils = []
 		self.pere = pere
                 self.cpt_seq = 0
-                self.sig = 0 #build_sig(new_sig)
-		self.genome = genome
+                self.sig = {} #build_sig(new_sig)
+		self.genomes = []
 
-	def add_seq_until_root(self):
+	def add_seq_until_root(self, g):
 		self.cpt_seq += 1
+		self.genomes.append(g)
+		self.compute_new_sig(g.sig)
 		if self.pere is not None:
-			self.pere.add_seq_until_root()
+			self.pere.add_seq_until_root(g)
 			
 	def compute_new_sig(self, f_sig):
-		self.sig = (self.sig * (self.cpt_seq-1) + f_sig) / self.cpt_seq 
+		for key in f_sig.keys():
+			if self.sig.has_key(key):
+				self.sig[key] = (self.sig[key] * (self.cpt_seq-1) + f_sig[key]) / self.cpt_seq 
+			else:
+				self.sig[key] = f_sig[key]
 
 	def add_fils(self, f):
 		self.fils.append(f)
-		self.add_seq_until_root()
-		self.compute_new_sig(0) #TROUVER LES SIGS 
-                
+
+	def add_leave_in_tree(self, g):
+		name = g.name
+		name = name.split(" ")
+		name = name[0] + " " + name[1] + " " + name[2] 
+		node = self.get_a_leave(name)
+		if node is None:
+			print("None returned")
+		node.add_seq_until_root(g)
+		node.compute_new_sig(g.sig) 
+		
+	def get_a_leave(self, name):
+		for e in self.fils:
+			if (name in e.name):
+				return e
+			else:
+				res = e.get_a_leave(name)
+				if res != None:
+					return res
+					
+
 	def get_a_fils(self, a):
 		res = None
 		if self.fils is not []:
 			for e in self.fils:
-				if e.name == a:
+				if (e.name in a) or (a in e.name):
 					res = e		
 		return res
 
@@ -51,10 +75,18 @@ class Node:
 			return self
 
 	def print_tree(self, space):
-		print(space + self.name)
-		if self.fils is not []:
-			for fils in self.fils:
-				fils.print_tree(space + "-")
+		if self.cpt_seq > 0:
+			print(space 
+			      + self.name 
+			      +  " >>> nbseq = " 
+			      + str(self.cpt_seq) + " nb genomes = " 
+			      + str(len(self.genomes))
+			if self.fils is not []:
+				for fils in self.fils:
+					fils.print_tree(space + "--")
+
+
+					
 
 def set_in_tree(e_list, tree):
 	while len(e_list) > 0:
