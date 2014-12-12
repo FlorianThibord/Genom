@@ -3,14 +3,14 @@
 
 class Node:
 	
-	def __init__ (self, name, pere):
+	def __init__ (self, name, pere, genome=None):
 		self.name = name
                 self.niveau = 0
 		self.fils = []
 		self.pere = pere
                 self.cpt_seq = 0
                 self.sig = 0 #build_sig(new_sig)
-
+		self.genome = genome
 
 	def add_seq_until_root(self):
 		self.cpt_seq += 1
@@ -109,7 +109,11 @@ def sort_my_list(l):
 		e.reverse()
 	return l
 
-l = process_taxlist()
-root = Node("Root", None)
-tree = build_tree(l, root)
-tree.print_tree("-")
+def main():
+	l = process_taxlist()
+	root = Node("Root", None)
+	tree = build_tree(l, root)
+	# tree.print_tree("-")
+	return tree
+	
+main()

@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy as stats
 import pylab
+import tree_build
 ######
 
 
@@ -279,14 +280,21 @@ def main(k):
 	l = build_kmere_list(nucl_list, k)
 	dico_main = build_empty_dict(l)
 	genomes = lecture_dossier_sequences(directory_to_read, k, dico_main)
+	i = 0
 	for g in genomes:
+		i += 1
+		k = i
+		if i > 4:
+			print(i)
+			break
 		(p,s) = calc_distrib_along_genome(g, 1000, 200, dico_main, k)
 #		plot_signature_genome(p, s, g.name)
+	tree = tree_build.main()
+	print(tree.name)
 
 
 
-
-main(3)
+main(2)
 
 
 
