@@ -80,7 +80,7 @@ class Node:
 			      + self.name 
 			      +  " >>> nbseq = " 
 			      + str(self.cpt_seq) + " nb genomes = " 
-			      + str(len(self.genomes))
+			      + str(len(self.genomes)))
 			if self.fils is not []:
 				for fils in self.fils:
 					fils.print_tree(space + "--")

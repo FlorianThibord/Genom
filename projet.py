@@ -11,6 +11,7 @@ import numpy as np
 import scipy as stats
 import pylab
 import tree_build
+import cPickle
 ######
 
 
@@ -82,11 +83,16 @@ def process_my_file(my_file, k, kmeres_l):
 	lines = file_in.readlines()
 	file_in.close()
 	file_name = get_seq_name(lines[0])
-	seq = ""
-	for i in range(1, len(lines)):
-		seq = seq + lines[i][:-1]
-	my_genome = Genome(file_name, seq, k, kmeres_l)
-	return my_genome
+	if "plasmid" in file_name:
+		print("PLASMID FOUND:", my_file)
+		return None
+	else:
+		seq = ""
+		for i in range(1, len(lines)):
+			seq = seq + lines[i][:-1]
+		# my_genome = Genome(file_name, seq, k, kmeres_l)
+		# return my_genome
+		return None
 
 
 def lecture_dossier_sequences(directory_to_read, k, kmeres_l):
@@ -95,8 +101,8 @@ def lecture_dossier_sequences(directory_to_read, k, kmeres_l):
 	liste_des_genomes = []
 	for i in range(0, len(listedesfichiers)):
 		res = process_my_file(directory_to_read + "/" + listedesfichiers[i], k, kmeres_l)
-		liste_des_genomes.append(res)
-		# liste_des_genomes[i].famille = directory_to_read.split("/")[1]
+		if res is not None:
+			liste_des_genomes.append(res)
 	return liste_des_genomes
 
 # DEPRECATED
@@ -279,7 +285,7 @@ def estimated_bin_dico(liste_genome):
 
 #test plot
 def main(k):
-	directory_to_read = "GENOMES2"
+	directory_to_read = "GENOMES"
 	l = build_kmere_list(nucl_list, k)
 	genomes = lecture_dossier_sequences(directory_to_read, k, l)
 	tree = tree_build.main()
@@ -287,13 +293,16 @@ def main(k):
 		tree.add_leave_in_tree(genomes[g])
 		# (p,s) = calc_distrib_along_genome(g, 1000, 200, dico_main, k)
 	tree.print_tree("-")
-
+	cPickle.dump(tree, open("my_tree", 'wb'))
 
 
 
 main(6)
 
-
+#
+# from projet import Genome
+# >>> from tree_build import Node
+# >>> t = cPickle.load(open("my_tree"))
 
 
 
