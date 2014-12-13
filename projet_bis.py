@@ -179,28 +179,28 @@ def build_matrix_distance(liste_genome_to_analyze):	#calc matrix optimiser (temp
 # MORE INFO :::::: http://math.mad.free.fr/depot/numpy/courbe.html
 # plt.clf()  ::: efface la fenetre graphique
 # plt.savefig(nomfichier)  ::: sauvegarde 		
-def plot_signature_genome(vectorposi, vectorscore, name):
-	plt.plot(vectorposi,vectorscore)
-	plt.ylabel('Distance windows vs Genome')
-	plt.xlabel('position dans Genome')
-	plt.savefig(name)
-def close_graph():
-	plt.close()
+# def plot_signature_genome(vectorposi, vectorscore, name):
+# 	plt.plot(vectorposi,vectorscore)
+# 	plt.ylabel('Distance windows vs Genome')
+# 	plt.xlabel('position dans Genome')
+# 	plt.savefig(name)
+# def close_graph():
+# 	plt.close()
 
 
 ########################
 # TEST STATISTIQUE
 
-def test_normalite(vector_to_analyze,choose_save):
-	res_norm=scipy.stats.shapiro(vector_to_analyze)
-	###
+# def test_normalite(vector_to_analyze,choose_save):
+# 	res_norm=scipy.stats.shapiro(vector_to_analyze)
+# 	###
 	
-	# AFFICHAGE GRAPHE
-	stats.probplot(measurements, dist="norm", plot=pylab)
-	pylab.show()
-	if (choose_save ==1):
-		plt.savefig('qqplot.png')
-	return res_norm
+# 	# AFFICHAGE GRAPHE
+# 	stats.probplot(measurements, dist="norm", plot=pylab)
+# 	pylab.show()
+# 	if (choose_save ==1):
+# 		# plt.savefig('qqplot.png')
+# 	return res_norm
 
 #############################################
 #############################################
