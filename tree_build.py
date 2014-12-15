@@ -31,23 +31,26 @@ class Node:
 
 	def add_leave_in_tree(self, g):
 		name = g.name
-		name = name.split(" ")
+		name = name.replace("\n", "")
+		name = name.split(" ")		
 		name = name[0] + " " + name[1] + " " + name[2] 
 		node = self.get_a_leave(name)
 		if node is None:
 			print("None returned")
+			print(name)
 		node.add_seq_until_root(g)
 		node.compute_new_sig(g.sig) 
 		
 	def get_a_leave(self, name):
 		for e in self.fils:
+			if (e.name in name):
+				print("OK", name, e.name)
 			if (name in e.name):
 				return e
 			else:
 				res = e.get_a_leave(name)
 				if res != None:
 					return res
-					
 
 	def get_a_fils(self, a):
 		res = None
@@ -75,7 +78,7 @@ class Node:
 			return self
 
 	def print_tree(self, space):
-		if self.cpt_seq > 0:
+		if self.cpt_seq > -1:
 			print(space 
 			      + self.name 
 			      +  " >>> nbseq = " 
@@ -106,7 +109,6 @@ def build_tree(tax_list, tree):
 		tree = set_in_tree(esp, tree) 
 	return tree
 
-
 def process_taxlist():
 	file_tax = open('taxlist.txt', 'r')
 	lines_tax = file_tax.readlines()
@@ -118,22 +120,21 @@ def process_taxlist():
         list_phyl = []
 	found = False
 	for line_r in lines_req:
-		found = False		
+		found = False
 		line_r = line_r.split(' ')
 		line_r = ' '.join(line_r[0:3])
 		for line_t in lines_tax:
 			list_phyl = line_t.split("\t")
 			if (line_r in list_phyl[0]) or (list_phyl[0] in line_r):
 				found = True
+				del list_phyl[1]
 				_ = list_phyl.pop()
 				list_phyl.reverse()
-				_ = list_phyl.pop()
-				_ = list_phyl.pop()
+				print(list_phyl)
 				list_tax_req.append(list_phyl)
 		if not found:
 			print("ATTENTION UNE SEQ NON TROUVEE")
         return list_tax_req
-
 
 def sort_my_list(l):
 	l.sort()

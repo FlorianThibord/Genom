@@ -6,10 +6,10 @@
 import os
 from math import *
 ####bibliotheque a installer::::
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
-# import scipy as stats
-# import pylab
+import scipy as stats
+import pylab
 import tree_build
 import cPickle
 ######
@@ -20,8 +20,8 @@ nucl_list = ["A","T","G","C"]
 class Genome:
 	def __init__ (self, name, seq, k, kmeres_l):
 		self.name = name
-		self.seq = seq
-		self.sig = compute_kmere(seq + seq[0:k], k, kmeres_l)
+		self.seq = ""
+		self.sig = {} # compute_kmere(seq + seq[0:k], k, kmeres_l)
 		self.famille="?"
 		self.prediction="?"
 
@@ -84,10 +84,8 @@ def process_my_file(my_file, k, kmeres_l):
 	file_in.close()
 	file_name = get_seq_name(lines[0])
 	if "plasmid" in file_name:
-		print("PLASMID FOUND:", my_file)
 		return None
 	else:
-		print("CHR : ", my_file)
 		seq = ""
 		for i in range(1, len(lines)):
 			seq = seq + lines[i][:-1]
@@ -100,22 +98,10 @@ def lecture_dossier_sequences(directory_to_read, k, kmeres_l):
 	listedesfichiers = os.listdir(directory_to_read)
 	liste_des_genomes = []
 	for i in range(0, len(listedesfichiers)):
-		print(i)
 		res = process_my_file(directory_to_read + "/" + listedesfichiers[i], k, kmeres_l)
 		if res is not None:
 			liste_des_genomes.append(res)
 	return liste_des_genomes
-
-# DEPRECATED
-# def process_sequences(k, dico):	# RECUPERER SEQUENCES DANS UN DOSSIER "GENOMES"
-# 	family_list = os.listdir("GENOMES")
-# 	genomes_list = []
-# 	os.chdir("./GENOMES/")
-# 	for i in family_list:
-# 		os.chdir("./" + i + "/")
-# 		genomes_list.append(process_my_file("sequence.fasta", k, dico))
-# 		os.chdir("./../")
-# 	return genomes_list
 
 def write_score(liste):
 	file_out= open("sauvegarde.txt", 'w')	
@@ -290,11 +276,15 @@ def main(k):
 	l = build_kmere_list(nucl_list, k)
 	genomes = lecture_dossier_sequences(directory_to_read, k, l)
 	tree = tree_build.main()
+	i = 0
+	tree.print_tree("-")
 	for g in range(len(genomes)):
+		i += 1
+		print (i)
 		tree.add_leave_in_tree(genomes[g])
 		# (p,s) = calc_distrib_along_genome(g, 1000, 200, dico_main, k)
-	tree.print_tree("-")
-	cPickle.dump(tree, open("my_tree", 'wb'))
+#	tree.print_tree("-")
+#	cPickle.dump(tree, open("my_tree", 'wb'))
 
 
 

@@ -54,7 +54,7 @@ Bdellovibrio bacteriovorus HD100
 Bordetella pertussis Tohama I 
 Borrelia burgdorferi B31 
 Candidatus Amoebophilus asiaticus 5a2 
-Candidatus Cloacamonas acidaminovorans 
+Candidatus Cloacamonas acidaminovorans str Evry
 Chlamydia trachomatis 434/Bu 
 Chlorobium chlorochromatii CaD3 
 Chloroflexus aurantiacus J-10-fl 
