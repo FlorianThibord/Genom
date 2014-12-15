@@ -43,8 +43,6 @@ class Node:
 		
 	def get_a_leave(self, name):
 		for e in self.fils:
-			if (e.name in name):
-				print("OK", name, e.name)
 			if (name in e.name):
 				return e
 			else:
@@ -130,7 +128,6 @@ def process_taxlist():
 				del list_phyl[1]
 				_ = list_phyl.pop()
 				list_phyl.reverse()
-				print(list_phyl)
 				list_tax_req.append(list_phyl)
 		if not found:
 			print("ATTENTION UNE SEQ NON TROUVEE")

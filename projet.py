@@ -20,8 +20,8 @@ nucl_list = ["A","T","G","C"]
 class Genome:
 	def __init__ (self, name, seq, k, kmeres_l):
 		self.name = name
-		self.seq = ""
-		self.sig = {} # compute_kmere(seq + seq[0:k], k, kmeres_l)
+		self.seq = seq
+		self.sig = compute_kmere(seq + seq[0:k], k, kmeres_l)
 		self.famille="?"
 		self.prediction="?"
 
@@ -279,15 +279,13 @@ def main(k):
 	l = build_kmere_list(nucl_list, k)
 	genomes = lecture_dossier_sequences(directory_to_read, k, l)
 	tree = tree_build.main()
-	i = 0
 	tree.print_tree("-")
 	for g in range(len(genomes)):
 		i += 1
-		print (i)
 		tree.add_leave_in_tree(genomes[g])
 		# (p,s) = calc_distrib_along_genome(g, 1000, 200, dico_main, k)
 #	tree.print_tree("-")
-#	cPickle.dump(tree, open("my_tree", 'wb'))
+	cPickle.dump(tree, open("my_tree", 'wb'))
 
 
 
