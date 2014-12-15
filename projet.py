@@ -84,8 +84,10 @@ def process_my_file(my_file, k, kmeres_l):
 	file_in.close()
 	file_name = get_seq_name(lines[0])
 	if "plasmid" in file_name:
+		print("PLSM FOUND:", file_name)
 		return None
 	else:
+		print("CHR:", file_name)
 		seq = ""
 		for i in range(1, len(lines)):
 			seq = seq + lines[i][:-1]
@@ -98,6 +100,7 @@ def lecture_dossier_sequences(directory_to_read, k, kmeres_l):
 	listedesfichiers = os.listdir(directory_to_read)
 	liste_des_genomes = []
 	for i in range(0, len(listedesfichiers)):
+		print(i)
 		res = process_my_file(directory_to_read + "/" + listedesfichiers[i], k, kmeres_l)
 		if res is not None:
 			liste_des_genomes.append(res)
